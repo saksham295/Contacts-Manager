@@ -160,11 +160,6 @@ export const editContact = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const oldContact = await findContact(user, newPhone);
-    if (oldContact) {
-      return res.status(400).json({ message: "Contact already exists" });
-    }
-
     const contactIndex = await getContactIndex(user, id);
     if (contactIndex === false) {
       return res.status(404).json({ message: "Contact does not exist" });

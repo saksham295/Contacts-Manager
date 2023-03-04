@@ -3,6 +3,7 @@ import axios from "axios";
 import { useHistory } from "react-router";
 import {
   Alert,
+  AppBar,
   Button,
   Card,
   CardActions,
@@ -17,6 +18,7 @@ import {
   Snackbar,
   Stack,
   TextField,
+  Toolbar,
   Typography,
 } from "@mui/material";
 import { IonContent } from "@ionic/react";
@@ -28,6 +30,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import DoneIcon from "@mui/icons-material/Done";
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
+import setAuthToken from "../../utils/setAuthToken";
 
 const Home = () => {
   const history = useHistory();
@@ -43,7 +46,7 @@ const Home = () => {
 
   useEffect(() => {
     getUser();
-  }, []);
+  }, [localStorage.token]);
 
   const getUser = () => {
     axios
@@ -63,6 +66,12 @@ const Home = () => {
         console.log(error);
         history.replace("/login");
       });
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setAuthToken();
+    history.replace("/login");
   };
 
   const handleNameChange = (e) => {
@@ -201,6 +210,13 @@ const Home = () => {
 
   return (
     <IonContent>
+      <AppBar position="static">
+        <Toolbar sx={{ justifyContent: "flex-end" }}>
+          <Button color="inherit" onClick={handleLogout}>
+            Logout
+          </Button>
+        </Toolbar>
+      </AppBar>
       <Container maxWidth="xl" sx={{ mb: 5 }}>
         {user !== undefined && contacts !== undefined ? (
           <Stack
@@ -216,6 +232,7 @@ const Home = () => {
                     <TextField
                       label="Enter New Name"
                       size="small"
+                      fullWidth
                       defaultValue={contact.contactName}
                       sx={{ mb: 2 }}
                       onChange={handleNameChange}
@@ -241,6 +258,7 @@ const Home = () => {
                       <TextField
                         label="Enter New Phone Number"
                         size="small"
+                        fullWidth
                         defaultValue={contact.contactPhone}
                         onChange={handlePhoneChange}
                       />
@@ -261,10 +279,8 @@ const Home = () => {
                     {contact.isEditing ? (
                       <TextField
                         label="Enter New Email ID"
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
                         size="small"
+                        fullWidth
                         defaultValue={contact.contactEmail}
                         onChange={handleEmailChange}
                       />
@@ -289,6 +305,7 @@ const Home = () => {
                         label="Enter New Address"
                         multiline
                         size="small"
+                        fullWidth
                         defaultValue={contact.contactAddress}
                         maxRows={4}
                         onChange={handleAddressChange}

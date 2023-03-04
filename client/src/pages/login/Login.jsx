@@ -13,6 +13,7 @@ import { useHistory } from "react-router";
 import { Alert, Snackbar } from "@mui/material";
 import { IonContent } from "@ionic/react";
 import axios from "axios";
+import setAuthToken from "../../utils/setAuthToken";
 
 const Login = () => {
   const history = useHistory();
@@ -58,16 +59,25 @@ const Login = () => {
       .then((response) => {
         if (response.data.token) {
           localStorage.setItem("token", response.data.token);
+          setAuthToken(response.data.token);
           history.replace("/home");
         } else {
-          setErrorMessage("UserID or Password Incorrect");
+          setErrorMessage("Email or Password Incorrect");
           setLoginError(true);
         }
       })
       .catch((error) => {
         console.log(error);
-        setErrorMessage("Can't connect to server. Please try again");
-        setLoginError(true);
+        if (error.respose.data.errors[0].msg) {
+          setErrorMessage(error.respose.data.errors[0].msg);
+          setLoginError(true);
+        } else if (error.response.data.msg) {
+          setErrorMessage("Email or Password Incorrect");
+          setLoginError(true);
+        } else {
+          setErrorMessage("Can't connect to server. Please try again");
+          setLoginError(true);
+        }
       });
   };
 

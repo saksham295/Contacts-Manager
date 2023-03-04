@@ -13,6 +13,7 @@ import { IonContent } from "@ionic/react";
 import { useHistory } from "react-router";
 import { Alert, Snackbar } from "@mui/material";
 import axios from "axios";
+import setAuthToken from "../../utils/setAuthToken";
 
 const Register = () => {
   const history = useHistory();
@@ -75,6 +76,7 @@ const Register = () => {
       .then((response) => {
         if (response.data.token) {
           localStorage.setItem("token", response.data.token);
+          setAuthToken(response.data.token);
           history.replace("/home");
         } else {
           setErrorMessage("Email already exists. Please login");
@@ -83,8 +85,13 @@ const Register = () => {
       })
       .catch((error) => {
         console.log(error);
-        setErrorMessage("Can't connect to server. Please try again");
-        setLoginError(true);
+        if (error.respose.data.errors[0].msg) {
+          setErrorMessage(error.respose.data.errors[0].msg);
+          setLoginError(true);
+        } else {
+          setErrorMessage("Can't connect to server. Please try again");
+          setLoginError(true);
+        }
       });
   };
 

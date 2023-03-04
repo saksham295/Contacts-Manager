@@ -133,7 +133,19 @@ const Home = () => {
           setContacts(newContacts);
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+        if (error.respose.data.errors[0].msg) {
+          setErrorMessage(error.respose.data.errors[0].msg);
+          setError(true);
+        } else if (error.response.data.message) {
+          setErrorMessage(error.response.data.message);
+          setError(true);
+        } else {
+          setErrorMessage("Can't connect to server. Please try again");
+          setError(true);
+        }
+      });
   };
 
   const handleDelete = (contactPhone) => {

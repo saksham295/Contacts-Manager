@@ -14,6 +14,7 @@ import { useHistory } from "react-router";
 import { Alert, Snackbar } from "@mui/material";
 import axios from "axios";
 import setAuthToken from "../../utils/setAuthToken";
+import config from "../../config";
 
 const Register = () => {
   const history = useHistory();
@@ -72,7 +73,11 @@ const Register = () => {
     };
 
     axios
-      .post("/user/register", JSON.stringify(postData), axiosConfig)
+      .post(
+        `${config.SERVER_URL}/user/register`,
+        JSON.stringify(postData),
+        axiosConfig
+      )
       .then((response) => {
         if (response.data.token) {
           localStorage.setItem("token", response.data.token);

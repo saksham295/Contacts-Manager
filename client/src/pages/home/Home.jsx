@@ -31,6 +31,7 @@ import DoneIcon from "@mui/icons-material/Done";
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 import setAuthToken from "../../utils/setAuthToken";
+import config from "../../config.json";
 
 const Home = () => {
   const history = useHistory();
@@ -50,7 +51,7 @@ const Home = () => {
 
   const getUser = () => {
     axios
-      .get("/user/getUser")
+      .get(`${config.SERVER_URL}/user/getUser`)
       .then((response) => {
         console.log("🚀 ~ file: home.jsx:14 ~ response:", response);
         if (response.status === 200) {
@@ -120,7 +121,11 @@ const Home = () => {
       },
     };
     axios
-      .post("/user/editContact", JSON.stringify(postData), axiosConfig)
+      .post(
+        `${config.SERVER_URL}/user/editContact`,
+        JSON.stringify(postData),
+        axiosConfig
+      )
       .then((response) => {
         console.log(response);
         if (response.status === 200) {
@@ -147,7 +152,11 @@ const Home = () => {
       },
     };
     axios
-      .post("/user/deleteContact", JSON.stringify(postData), axiosConfig)
+      .post(
+        `${config.SERVER_URL}/user/deleteContact`,
+        JSON.stringify(postData),
+        axiosConfig
+      )
       .then((response) => {
         console.log(response);
         if (response.status === 200) {
@@ -182,7 +191,11 @@ const Home = () => {
       },
     };
     axios
-      .post("/user/addContact", JSON.stringify(postData), axiosConfig)
+      .post(
+        `${config.SERVER_URL}/user/addContact`,
+        JSON.stringify(postData),
+        axiosConfig
+      )
       .then((response) => {
         console.log(response);
         if (response.status === 200) {

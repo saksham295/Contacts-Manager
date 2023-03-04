@@ -14,6 +14,7 @@ import { Alert, Snackbar } from "@mui/material";
 import { IonContent } from "@ionic/react";
 import axios from "axios";
 import setAuthToken from "../../utils/setAuthToken";
+import config from "../../config.json";
 
 const Login = () => {
   const history = useHistory();
@@ -55,7 +56,11 @@ const Login = () => {
     };
 
     axios
-      .post("/user/login", JSON.stringify(postData), axiosConfig)
+      .post(
+        `${config.SERVER_URL}/user/login`,
+        JSON.stringify(postData),
+        axiosConfig
+      )
       .then((response) => {
         if (response.data.token) {
           localStorage.setItem("token", response.data.token);
